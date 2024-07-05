@@ -52,7 +52,7 @@ int main(void) {
 
     printf("\n\n\nDijkstra2() starting from node %ld:\n\n", u);
     printf("After completing the code in Q1-Q5 (Graph.c), please also uncomment line %d in %s:\n\n", (__LINE__ + 1), __FILE__);
-    //Dijkstra2(pGraph, u);
+    Dijkstra2(pGraph, u);
 
     ReleaseGraph(pGraph);
 
