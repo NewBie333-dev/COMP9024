@@ -14,6 +14,7 @@ struct GraphNode {
     char name[MAX_ID_LEN + 1];
 };
 
+
 struct Graph{
     /*
        Memory Layout:
@@ -405,7 +406,7 @@ void Dijkstra(struct Graph *pGraph, long startNodeId) {
     free(visited); 
 }
 
-#if 0
+#if 1
 /*
     Please complete the code in Q1-Q5.
 
@@ -422,14 +423,14 @@ void Dijkstra(struct Graph *pGraph, long startNodeId) {
 static void DisplayPath(struct Graph *pGraph, long *preNodeIds, long u, long v) {
     struct Stack *pStack = CreateStack();
     StackPush(pStack, v);
-    while (______Q1______) {     
-        ______Q2______;
+    while (u != v) {    // Q1 
+        v = preNodeIds[v]; //Q2
         StackPush(pStack, v);
     }
     printf("\t");
     while(!StackIsEmpty(pStack)) {
         STACK_ITEM_T nid = StackPop(pStack);
-        printf("%s",  ______Q3______);   
+        printf("%s",  pGraph->pNodes->name[nid]);   //Q3
         if (!StackIsEmpty(pStack)) {
             printf(" --> ");
         }
@@ -461,7 +462,7 @@ void Dijkstra2(struct Graph *pGraph, long startNodeId) {
     GenOneImage(pGraph, "Dijkstra2", "images/Dijkstra2", cnt, visited);  
     //
     distances[startNodeId] = 0;
-    ______Q4______;
+    preNodeIds[startNodeId] = startNodeId; //Q4
 
     for (long i = 0; i < pGraph->n; i++) {
         long u = getNodeIdWithMinDistance(distances, visited, pGraph->n);
@@ -474,7 +475,7 @@ void Dijkstra2(struct Graph *pGraph, long startNodeId) {
             if (!visited[v] && MatrixElement(pGraph, u, v) != 0 && distances[u] != INFINITY_VALUE) {
                 if (distances[u] + MatrixElement(pGraph, u, v) < distances[v]) {
                     distances[v] = distances[u] + MatrixElement(pGraph, u, v);
-                    ______Q5______;
+                    preNodeIds[v] = u; //Q5
                 }
             }
         }
