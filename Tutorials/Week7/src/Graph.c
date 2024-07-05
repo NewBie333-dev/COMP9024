@@ -430,7 +430,7 @@ static void DisplayPath(struct Graph *pGraph, long *preNodeIds, long u, long v) 
     printf("\t");
     while(!StackIsEmpty(pStack)) {
         STACK_ITEM_T nid = StackPop(pStack);
-        printf("%s",  pGraph->pNodes->name[nid]);   //Q3
+        printf("%s",  pGraph->pNodes[nid]);   //Q3
         if (!StackIsEmpty(pStack)) {
             printf(" --> ");
         }
