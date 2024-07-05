@@ -52,6 +52,7 @@ void BubbleSort(int *ptr, int n) {
 
         2. (n-1) passes needed in Bubble Sort
      */
+    // for (int iMax = n - 1; iMax > 0; iMax--)
     for (int iMax = n - 2; iMax >= 0; iMax--) { // (n-1) passes
         
         // printf() is quite useful in observing the behavior of a program
