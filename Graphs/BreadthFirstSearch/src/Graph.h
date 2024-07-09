@@ -21,8 +21,7 @@ void GraphAddNode(struct Graph *pGraph, long u, char *name);
 void PrintGraph(struct Graph *pGraph);
 
 
-void RecursiveDFS(struct Graph *pGraph);
-
+void BFS(struct Graph *pGraph);
 
 void Graph2Dot(struct Graph *pGraph, 
                char *filePath,
@@ -35,7 +34,6 @@ void Graph2Dot(struct Graph *pGraph,
 // Based on Graph2Dot()
 void GenOneImage(struct Graph *pGraph, char *graphName, char *fileName, long seqNo, int *visited);
 
-int HasCycle(struct Graph *pGraph);
 #endif
 
 

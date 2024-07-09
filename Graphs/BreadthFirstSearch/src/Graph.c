@@ -2,7 +2,7 @@
 #include <stdlib.h>   // malloc()
 #include <string.h>   // memset()
 #include <assert.h>   // assert()
-#include "Stack.h"
+#include "Queue.h"
 #include "Graph.h"
 
 
@@ -254,217 +254,89 @@ void Graph2Dot(struct Graph *pGraph,
     }                
 }
 
-
-#if 1
 static long dfsImageCnt = 0;
 
-static void DepthFirstSearch(struct Graph *pGraph, long u, int *visited) {
+#if 0
+void BreadthFirstSearch2(struct Graph *pGraph, long u, int *visited) {
+    assert(IsLegalNodeNum(pGraph, u));
+
+    struct Queue *pQueue = CreateQueue();
+    assert(pQueue);
+
+    QueueEnqueue(pQueue, u);
     visited[u] = 1;
-    printf("visiting %s\n", pGraph->pNodes[u].name);
-    
-    dfsImageCnt++;
+    while(!QueueIsEmpty(pQueue)) {
+        printf("\t\t\t");
+        PrintQueue(pQueue);
+        long curNodeId = QueueDequeue(pQueue);
+        printf("visiting %s \n", pGraph->pNodes[curNodeId].name);
+        for (long v = 0; v < pGraph->n; v++) {
+            if (MatrixElement(pGraph, curNodeId, v) == CONNECTED && !visited[v]) {
+                QueueEnqueue(pQueue, v);
+                visited[v] = 1;
+            }
+        }
 
-    if (pGraph->isDirected) {
-        GenOneImage(pGraph, "DfsDirected", "images/DfsDirected", dfsImageCnt, visited);
-    } else {
-        GenOneImage(pGraph, "DfsUndirected", "images/DfsUndirected", dfsImageCnt, visited);
     }
+    printf("\n");
+    ReleaseQueue(pQueue);
+}
+#endif
 
-    // recursively visit the adjacent nodes of u, if they have not been visited yet
-    for(long v = 0; v < pGraph->n; v++) {
-        if (MatrixElement(pGraph, u, v) == CONNECTED && !visited[v]) {
-            DepthFirstSearch(pGraph, v, visited);
+void BreadthFirstSearch(struct Graph *pGraph, long u, int *visited) {
+    assert(IsLegalNodeNum(pGraph, u));
+
+    struct Queue *pQueue = CreateQueue();
+    assert(pQueue);
+
+    QueueEnqueue(pQueue, u);
+    while(!QueueIsEmpty(pQueue)) {
+        printf("\t\t\t");
+        PrintQueue(pQueue);
+        long curNodeId = QueueDequeue(pQueue);
+        if (!visited[curNodeId]) {
+            visited[curNodeId] = 1;
+            printf("visiting %s \n", pGraph->pNodes[curNodeId].name);
+
+            dfsImageCnt++;
+            if (pGraph->isDirected) {
+                GenOneImage(pGraph, "BfsDirected", "images/BfsDirected", dfsImageCnt, visited);
+            } else {
+                GenOneImage(pGraph, "BfsUndirected", "images/BfsUndirected", dfsImageCnt, visited);
+            }            
+
+            for (long v = 0; v < pGraph->n; v++) {
+                if (MatrixElement(pGraph, curNodeId, v) == CONNECTED && !visited[v]) {
+                    QueueEnqueue(pQueue, v);
+                }
+            }            
         }
     }
+    printf("\n");
+    ReleaseQueue(pQueue);
 }
 
-void RecursiveDFS(struct Graph *pGraph) {
+void BFS(struct Graph *pGraph) {
     int *visited = (int *) malloc(pGraph->n * sizeof(int));
+    assert(visited);
     //memset(visited, 0, sizeof(int) * pGraph->n);
     for (long v = 0; v < pGraph->n; v++) {
         visited[v] = 0;
     }
 
     dfsImageCnt = 0;
-
     if (pGraph->isDirected) {
-        GenOneImage(pGraph, "DfsDirected", "images/DfsDirected", dfsImageCnt, visited);
+        GenOneImage(pGraph, "BfsDirected", "images/BfsDirected", dfsImageCnt, visited);
     } else {
-        GenOneImage(pGraph, "DfsUndirected", "images/DfsUndirected", dfsImageCnt, visited);
+        GenOneImage(pGraph, "BfsUndirected", "images/BfsUndirected", dfsImageCnt, visited);
     }
 
     for (long u = 0; u < pGraph->n; u++) {
         if (!visited[u]) {
-            DepthFirstSearch(pGraph, u, visited);
+            printf("BreadthFirstSearch(%ld)\n", u);
+            BreadthFirstSearch(pGraph, u, visited);
         }
     }
     printf("\n");
     free(visited);
 }
-#endif
-
-/*
-    if v is already on stack
-        return the number of nodes in a cycle    
-    else
-        return 0
- */
-static int GetNumOfNodesInCycle(struct Graph *pGraph, long v, struct Stack *pNodesOnStack) {
-    // Not used now.
-    (void) pGraph;
-    // number of node in a cycle
-    int n = 0;
-    // whether v is on stack
-    int isOnStack = 0;
-    // Get an iterator of the stack
-    StackIterator it = GetIterator(pNodesOnStack);
-    
-    // visit each element
-    while (HasNext(&it)) {
-        STACK_ITEM_T nodeId = NextItem(&it);
-        n++;
-        if (nodeId == v) {
-            isOnStack = 1;
-            break;
-            //return n;
-        }
-    }
-    if (!isOnStack) {
-        n = 0;
-    }
-    printf("\n----- Test whether node %ld is on stack: NumOfNodesInCycle = %d -----\n", v, n);
-    PrintStack(pNodesOnStack);
-    printf("------------------------------------------------------------------\n\n");
-    return n;
-}
-
-//#define  STOP_DETECTION_AT_FIRST_CYCLE
-
-static long cycles = 0;
-static long imgCnt = 0;
-
-static void PrintNodesInCycle(struct Graph *pGraph, long v, struct Stack *pNodesOnStack) {
-    // Get an iterator of the stack
-    StackIterator it = GetIterator(pNodesOnStack);
-    
-    cycles++;
-
-    if (pGraph->isDirected) {
-        printf("\n\t\t****************** Cycle %ld detected (directed) *****************\n\t\t", cycles);
-    } else {
-        printf("\n\t\t****************** Cycle %ld detected (undirected) *****************\n\t\t", cycles);
-    }
-    /*
-        v == 2
-        Stack: 6  7  4  2  0
-
-        Nodes in a cycle: 
-        6 7 4 2
-
-
-     */
-    PrintStack(pNodesOnStack);
-    printf("\t\tnode %ld is on stack\n", v);
-    printf("\t\tNodes in a cycle: \n\t\t");
-    // visit each element
-    while (HasNext(&it)) {
-        STACK_ITEM_T nodeId = NextItem(&it);
-        printf("%ld ", nodeId);
-        if (nodeId == v) {
-            break;
-        }
-    }
-    printf("\n\t\t****************************************************************\n");
-}
-
-static int DetectCycle(struct Graph *pGraph, long u, int *visited, struct Stack *pNodesOnStack) {
-    visited[u] = 1;
-    // Push u onto the data stack
-    StackPush(pNodesOnStack, u);    
-    
-    
-    imgCnt++;
-    if (pGraph->isDirected) {
-        GenOneImage(pGraph, "HasCycleDirected", "images/HasCycleDirected", imgCnt, visited);
-    } else {
-        GenOneImage(pGraph, "HasCycleUndirected", "images/HasCycleUndirected", imgCnt, visited);
-    }
-    int cycleDetected = 0;
-
-    // recursively visit the adjacent nodes of u, if they have not been visited yet
-    for(long v = 0; v < pGraph->n; v++) {
-        if (MatrixElement(pGraph, u, v)) {
-            if (!visited[v]) {
-                if (DetectCycle(pGraph, v, visited, pNodesOnStack)) {
-                    cycleDetected = 1;
-#ifdef STOP_DETECTION_AT_FIRST_CYCLE                    
-                    break;
-#endif                    
-                }
-            } else {
-                int nodesInCycle = GetNumOfNodesInCycle(pGraph, v, pNodesOnStack);
-                if (nodesInCycle > 0) {
-                    if (!pGraph->isDirected) {
-                        /*
-                            In an undirected graph,
-
-                            an edge 'n0 -- n2' is represented as two directed edges:
-
-                                n0 -> n2
-                                n2 -> n0
-                            
-                            We should not treat n2 -> n0 and n0 -> n2 as a cycle in an undirected edge.
-                            So we need to check it here.                                                       
-                        */
-                        if (nodesInCycle == 2) {
-                            continue;
-                        }
-                    }
-                    PrintNodesInCycle(pGraph, v, pNodesOnStack);
-                    cycleDetected = 1;
-#ifdef  STOP_DETECTION_AT_FIRST_CYCLE                   
-                    break;
-#endif                    
-                }
-            }
-        }
-    }
-    StackPop(pNodesOnStack);
-    return cycleDetected;
-}
-
-int HasCycle(struct Graph *pGraph) {
-    int cyclic = 0;
-    int *visited = (int *) malloc(pGraph->n * sizeof(int));
-    struct Stack *pNodesOnStack = CreateStack();
-    //memset(visited, 0, sizeof(int) * pGraph->n);
-    for (long v = 0; v < pGraph->n; v++) {
-        visited[v] = 0;
-    }
-
-    imgCnt = 0;
-    cycles = 0;
-    if (pGraph->isDirected) {
-        GenOneImage(pGraph, "HasCycleDirected", "images/HasCycleDirected", imgCnt, visited);
-    } else {
-        GenOneImage(pGraph, "HasCycleUndirected", "images/HasCycleUndirected", imgCnt, visited);
-    }
-    
-    for (long u = 0; u < pGraph->n; u++) {
-        if (!visited[u]) {
-            if (DetectCycle(pGraph, u, visited, pNodesOnStack)) {
-                cyclic = 1;
-#ifdef STOP_DETECTION_AT_FIRST_CYCLE                    
-                break;
-#endif
-            }
-        }
-    }
-    free(visited);
-    //assert(StackIsEmpty(pNodesOnStack));
-    ReleaseStack(pNodesOnStack); 
-    return cyclic;
-}
-
-
-

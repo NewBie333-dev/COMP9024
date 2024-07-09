@@ -3,11 +3,10 @@
 #include <stdlib.h>   // malloc() and free()
 #include <string.h>   // memset()
 #include "BiTree.h"
-
 #include "Queue.h"
 
 /*
-  Create an Ast node for an expression.
+  Create a binary tree node
  */
 BiTreeNodePtr CreateBinaryTreeNode(long numVal, char *nodeName, BiTreeNodePtr left, BiTreeNodePtr right) {
     BiTreeNodePtr pNode = (BiTreeNodePtr) malloc(sizeof(struct BiTreeNode));
@@ -28,7 +27,6 @@ BiTreeNodePtr CreateBinaryTreeNode(long numVal, char *nodeName, BiTreeNodePtr le
     return pNode;
 }
 
-#if 0
 BiTreeNodePtr CreateBinaryTree(void) {
     /*********************************  
 
@@ -56,7 +54,6 @@ BiTreeNodePtr CreateBinaryTree(void) {
 #endif
     return root;
 }
-#endif
 
 void ReleaseBinaryTree(BiTreeNodePtr root) {
     if (root) {
@@ -65,33 +62,6 @@ void ReleaseBinaryTree(BiTreeNodePtr root) {
         free(root);
     }
 }
-
-
-void PreOrderTraversal(BiTreeNodePtr root, NodeVisitor visit) {
-    if (root) {
-        visit(root);
-        PreOrderTraversal(root->leftChild, visit);    
-        PreOrderTraversal(root->rightChild, visit);
-    }
-}
-
-
-void InOrderTraversal(BiTreeNodePtr root, NodeVisitor visit) {
-    if (root) {
-        InOrderTraversal(root->leftChild, visit);
-        visit(root);
-        InOrderTraversal(root->rightChild, visit);
-    }
-}
-
-void PostOrderTraversal(BiTreeNodePtr root, NodeVisitor visit) {
-    if (root) {
-        PostOrderTraversal(root->leftChild, visit);    
-        PostOrderTraversal(root->rightChild, visit);
-        visit(root);
-    }
-}
-
 
 
 #define FILE_NAME_LEN  255
@@ -108,7 +78,7 @@ void GenOneImage(BiTreeNodePtr root, char *graphName, char *fileName, long seqNo
 
     snprintf(command, FILE_NAME_LEN*4, "dot -T png %s -o %s", dotFileName, pngFileName);
 
-    //printf("%s\n", command);
+    printf("%s\n", command);
     
     // Execute the command in a child process (fork() + exec() on Linux)
     system(command); 
@@ -125,6 +95,7 @@ static void DisplayVisited(FILE *dotFile, BiTreeNodePtr root) {
     }
 }
 
+
 /*
     Dot Files
 
@@ -138,7 +109,7 @@ static void DisplayVisited(FILE *dotFile, BiTreeNodePtr root) {
     97    99
     
 
-    digraph OutBiTree {    
+    digraph OurBiTree {
     "100" -> {"98"} [label="L"]
     "100" -> {"101"} [label="R"]
     "98" -> {"97"} [label="L"]
@@ -196,116 +167,5 @@ void BiTree2Dot(BiTreeNodePtr root,
         fprintf(dotFile, "}\n");
         fclose(dotFile);
     }                
-}
-
-/////////////////////////////////// Binary Search Tree ///////////////////////////////////////////
-
-void BiTreeInsert(BiTreeNodePtr *pNodePtr, long numVal, char *nodeName) {  
-    BiTreeNodePtr pNode = *pNodePtr;
-    if (pNode == NULL) {
-        BiTreeNodePtr tmp = CreateBinaryTreeNode(numVal, nodeName, NULL, NULL);
-        *pNodePtr = tmp;
-    } else {
-        if (numVal < pNode->value.numVal) {
-            BiTreeInsert(&pNode->leftChild, numVal, nodeName);
-        } else if (numVal > pNode->value.numVal) {
-            BiTreeInsert(&pNode->rightChild, numVal, nodeName);
-        } else {
-            // If numVal is already in the binary search tree, do nothing.
-        }
-    }  
-}
-
-#if 0
-BiTreeNodePtr BiTreeSearch(BiTreeNodePtr root, long numVal) {
-    if (______Q1______) {
-        return ______Q2______;
-    } else if (numVal == root->value.numVal) {
-        return ______Q3______;
-    } else if (numVal < root->value.numVal) {
-        return ______Q4______;
-    } else { // numVal > root->value.numVal
-        return ______Q5______;
-    }
-}
-#endif
-
-BiTreeNodePtr BiTreeMinValueNode(BiTreeNodePtr root) {
-    BiTreeNodePtr cur = root;
-    // Get the left-most node
-    while ((cur != NULL) && (cur->leftChild != NULL)) {
-        cur = cur->leftChild;
-    }
-    return cur;
-}
-
-void BiTreeDelete(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, long numVal) {
-    static long cnt = 0;
-
-    BiTreeNodePtr pNode = *pNodePtr;
-    if (pNode) {
-        if (numVal < pNode->value.numVal) {
-            BiTreeDelete(pRoot, &(pNode->leftChild), numVal);
-        } else if (numVal > pNode->value.numVal) {
-            BiTreeDelete(pRoot, &(pNode->rightChild), numVal);
-        } else {
-            /************************************************************************
-                If the node (to be deleted) has:
-
-                    0 child:
-
-                        leftChild == NULL && rightChild == NULL    // case 00
-
-                    1 child:
-
-                        leftChild == NULL && rightChild != NULL    // case 01
-
-                        or 
-                        leftChild != NULL && rightChild == NULL    // case 10
-                 
-                    2 children:
-
-                        leftChild != NULL && rightChild != NULL    // case 11
-
-             **************************************************************************/
-            
-            if (pNode->leftChild == NULL) {   // case 00 and case 01
-                BiTreeNodePtr tmp = pNode->rightChild;
-                printf("deleting %ld\n", pNode->value.numVal);
-                free(pNode);
-                *pNodePtr = tmp;
-
-                cnt++;
-                GenOneImage(*pRoot, "BiTreeDelete", "images/BiTreeDelete", cnt);
-            } else if (pNode->rightChild == NULL) { // case 10
-                BiTreeNodePtr tmp = pNode->leftChild;
-                printf("deleting %ld\n", pNode->value.numVal);      
-                free(pNode);
-                *pNodePtr = tmp;
-
-                cnt++;
-                GenOneImage(*pRoot, "BiTreeDelete", "images/BiTreeDelete", cnt);                
-            } else {
-                // case 11:  with two children
-                // Get pNode's in-order successor, which is left-most node in its right sub-tree.
-                BiTreeNodePtr pSuccessor = BiTreeMinValueNode(pNode->rightChild);
-
-                // (Swapping is done for clearer debugging output)
-                // Swap the values of the node pointed to by pNode and its in-order successor              
-                NodeValue val = pNode->value;
-                // Copy the successor's value (this copy is necessary)
-                pNode->value = pSuccessor->value;
-                pSuccessor->value = val;
-
-                // Display the inconsistent state
-                cnt++;
-                GenOneImage(*pRoot, "BiTreeDelete", "images/BiTreeDelete", cnt);
-                // Now, numVal is in right sub-tree. Let us recursively delete it.
-                // Temporarily, the whole binary search tree is at an inconsistent state.
-                // It will become consistent when the deletion is really done.
-                BiTreeDelete(pRoot, &pNode->rightChild, pSuccessor->value.numVal);
-            }
-        }
-    }
 }
 

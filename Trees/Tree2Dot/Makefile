@@ -31,8 +31,7 @@ OBJ_FILES_IN_BUILD =$(subst src/,$(BUILD_DIR)/,$(TMP_OBJ_FILES))
 
 
 CC= gcc
-#CFLAGS = -m32 -g -no-pie --save-temps -I $(PROJ_ROOT_PATH)/src
-#CFLAGS = -g --save-temps -I $(PROJ_ROOT_PATH)/src
+#CFLAGS = -g -no-pie --save-temps -I $(PROJ_ROOT_PATH)/src
 #CFLAGS = -no-pie --save-temps -fno-asynchronous-unwind-tables -I $(PROJ_ROOT_PATH)/src 
 CFLAGS = -g -Wall -I $(PROJ_ROOT_PATH)/src
 
@@ -55,7 +54,7 @@ $(BUILD_DIR)/%.o: src/%.c $(H_SRC_FILES)
 	${CC} ${CFLAGS} -c $< -o $@
 
 view:
-	find ./images -name "*.png" | sort | xargs feh -g 720x540 &
+	find . -name "*.png" -a -not -name  "*NodeState.png" | sort | xargs feh -g 720x540 &	
 
 # clean all the files generated	
 clean:
