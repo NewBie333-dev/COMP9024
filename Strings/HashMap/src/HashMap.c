@@ -173,6 +173,7 @@ void HashMapPut(struct HashMap *pMap, HashMapKeyTy key, HashMapValueTy value) {
 
     // Add a key-value pair
     struct BucketEntry *pEntry = CreateBucketEntry(key, value);
+    // 头插法
     // add the entry at the front of the bucket
     pEntry->next = pMap->buckets[index];
     pMap->buckets[index] = pEntry;

@@ -24,7 +24,7 @@
 #define HEAP_SIZE (4 * 1024)
 
 // 
-#define RESIDUE 8
+#define RESIDUE 8 //what is residue?
 
 // see the comments for STACK_SIZE_ALIGNED() in src/emit.c
 #define ALIGN 3
@@ -117,7 +117,7 @@ static void *OurMalloc(heap_size_t size) {
 
         //memset(ptr + 1, 0, alignedSize);
         return (ptr + 1);
-      } 
+      } // what does it by cutting here?
       else { 
         /* 
           When the memory block is not large, no cutting is performed any more.
