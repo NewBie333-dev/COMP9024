@@ -56,7 +56,7 @@ int main(int argc, char **argv, char **env) {
     
     BiTreeNodePtr node = NULL;
     printf("After completing the code in Q1-Q5 (BiTree.c), please also uncomment line %d in %s:\n\n", (__LINE__ + 1), __FILE__);    
-    //node = BiTreeSearch(root, targetVal);
+    node = BiTreeSearch(root, targetVal);
     if (node) {
         printf("Found: BiTreeSearch(root, %ld) == %ld\n\n", node->value.numVal, targetVal);
     } else {

@@ -418,14 +418,17 @@ static void BiTreeSelfBalance(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, lon
         BiTreeLeftRotate(pNodePtr);
     }     
 }
-
+/*
+这里用二层指针的含义和swap函数的原理一样
+都是通过指针修改variable的值,只是这里修改的是值是指针而已
+*/
 void BiTreeInsert(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, long numVal, char *nodeName, long *pCnt) {  
     BiTreeNodePtr pNode = *pNodePtr;
     assert(pCnt);
     char *graphName = "BiTreeBiTreeInsert";
     char *fileName = "images/BiTreeBiTreeInsert";
     if (pNode == NULL) {
-        BiTreeNodePtr tmp = CreateBinaryTreeNode(numVal, nodeName, NULL, NULL);
+        BiTreeNodePtr tmp = CreateBinaryTreeNode(numVal, nodeName, NULL, NULL); // *pNodePtr = CreateBinaryTreeNode(numVal, nodeName, NULL, NULL);
         *pNodePtr = tmp;
         printf("inserting %ld\n", numVal);
         return;

@@ -28,7 +28,7 @@ BiTreeNodePtr CreateBinaryTreeNode(long numVal, char *nodeName, BiTreeNodePtr le
     return pNode;
 }
 
-#if 0
+#if 1
 BiTreeNodePtr CreateBinaryTree(void) {
     /*********************************  
 
@@ -39,7 +39,7 @@ BiTreeNodePtr CreateBinaryTree(void) {
      97    99
 
      *********************************/
-#if 1
+#if 0
     // To be simple, let's manually create the binary tree. 
     BiTreeNodePtr leftLeft = CreateBinaryTreeNode(97, NULL, NULL, NULL);
     BiTreeNodePtr leftRight = CreateBinaryTreeNode(99, NULL, NULL, NULL);
@@ -216,16 +216,16 @@ void BiTreeInsert(BiTreeNodePtr *pNodePtr, long numVal, char *nodeName) {
     }  
 }
 
-#if 0
+#if 1 
 BiTreeNodePtr BiTreeSearch(BiTreeNodePtr root, long numVal) {
-    if (______Q1______) {
-        return ______Q2______;
+    if (!root) { // Q1
+        return NULL; //Q2
     } else if (numVal == root->value.numVal) {
-        return ______Q3______;
+        return root; // Q3 
     } else if (numVal < root->value.numVal) {
-        return ______Q4______;
+        return BiTreeSearch(root->leftChild, numVal); //Q4
     } else { // numVal > root->value.numVal
-        return ______Q5______;
+        return BiTreeSearch(root->rightChild, numVal); //Q5
     }
 }
 #endif

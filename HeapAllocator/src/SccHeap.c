@@ -109,8 +109,11 @@ static void *OurMalloc(heap_size_t size) {
         ////////////////////////////////////////////////////////////////////////////////////
 
         // Q1. ___________________
+        cur->size = (cur->size - alignedSize - sizeof(heap_size_t));
         // Q2. ___________________
+        ptr = (heap_size_t *)((char *)cur + cur->size + sizeof(heap_size_t));
         // Q3. ___________________
+        *ptr = alignedSize;
 
         //memset(ptr + 1, 0, alignedSize);
         return (ptr + 1);
@@ -221,8 +224,11 @@ static void OurFree(void *addr) {
         ////////////////////////////////////////////////////////////////////////////////////
 
         // Q4. ___________________
+        freedNode = first;
         // Q5. ___________________
+        cur = freedNode->next;
         // Q6. ___________________
+        mergeIfAdjacent(freedNode, cur);
       } 
       else {
         /*
@@ -243,9 +249,13 @@ static void OurFree(void *addr) {
         ////////////////////////////////////////////////////////////////////////////////////
 
         // Q7. ___________________
+        freedNode = pre->next;
         // Q8. ___________________
+        cur = freedNode->next;
         // Q9. ___________________
+        mergeIfAdjacent(freedNode, cur);
         // Q10. __________________ 
+        mergeIfAdjacent(pre, freedNode);
       }
       return;
     }
