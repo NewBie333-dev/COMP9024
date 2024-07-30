@@ -27,8 +27,7 @@ A Binary Search Tree (BST) is a type of data structure that organizes data effic
 
 Each node has at most two children, with values smaller than the node on the left and values larger on the right. 
 
-However, in worst case, an unbalanced BST might degerate into a structure that resembles 
-a linked list, with O(n) time complexity in searching.
+However, in worst case, an unbalanced BST might degenerate into a structure that resembles a linked list, with O(n) time complexity in searching.
 
 Self-balancing trees are introduced to resolve this issue.
 
@@ -36,6 +35,9 @@ In computer science, an AVL tree (named after inventors Adelson-Velsky and Landi
 
 An AVL tree with n nodes maintains a logarithmic height O(log(n)), ensuring efficient operations such as insertion, deletion, and search.
 
+| Self-Balancing Binary Search Tree (after inserting 50, 20, 10, 30, 40, 70, 60, 100, 90, and 80) |
+|:-------------:|
+| <img src="diagrams/AVLTree.png" width="80%" height="80%"> |
 
 ### Tree Height
 
@@ -55,6 +57,18 @@ else
     its height is Max(leftHeight, rightHeight) + 1
 ```
 Note that its height can be also defined as -1 when root is NULL.
+
+| A binary tree with 7 nodes (height = 3 = log($2^{3}$) $\approx$ log(7)) |
+|:-------------:|
+| <img src="diagrams/Nodes7.png" width="80%" height="80%"> |
+
+| A binary tree with 15 nodes (height = 4 = log($2^{4}$) $\approx$ log(15)) |
+|:-------------:|
+| <img src="diagrams/Nodes15.png" width="80%" height="80%"> |
+
+| A binary tree with 31 nodes (height = 5 = log($2^{5}$) $\approx$ log(31))|
+|:-------------:|
+| <img src="diagrams/Nodes31.png" width="100%" height="100%"> |
 
 ```C
 int GetMax(int h1, int h2) {
@@ -78,7 +92,9 @@ static void UpdateHeight(BiTreeNodePtr root) {
 ``` 
 
 ### Balance Factor
-Each node in an AVL tree has a balance factor, which is calculated as the difference between the heights of its left and right subtrees. The balance factor can be -1, 0, or +1. The tree is balanced if every node’s balance factor is within this range.
+Each node in an AVL tree has a balance factor, which is calculated as the difference between the heights of its left and right subtrees. The balance factor can be -1, 0, or 1.
+
+The tree is balanced (i.e., no self-balancing is required) if every node’s balance factor is within the range {-1, 0, 1}.
 
 In this project, the balance factor is defined as follows.
 
@@ -93,9 +109,13 @@ int BiTreeBalanceFactor(BiTreeNodePtr root) {
 ```
 In terms of our definition, 
 
-a tree node is **left-heavy** when its balance factor is larger than 0  (bf > 0).
+a tree node is **left-heavy** when its balance factor is larger than 0  (bf > 0);
 
-a tree node is **right-heavy** when its balance factor is smaller than 0 (bf < 0).
+a tree node is **right-heavy** when its balance factor is smaller than 0 (bf < 0);
+
+a tree node is **in-balance** when its balance factor is 0 (bf == 0);
+
+a tree node is **unbalanced** (i.e., it requires self-balancing) when its balance factor is not in {-1, 0, 1} (that is, bf < -1 || bf > 1).
 
 ### Self Balancing
 
@@ -159,7 +179,7 @@ Then, click **Run -> Start Debugging**
 ```sh
 ├── Makefile             defining set of tasks to be executed (the input file of the 'make' command)
 |
-├── README.md            introduction to this tutorial
+├── README.md            introduction to this project
 |
 ├── src                  containing *.c and *.h
 |   |
@@ -352,6 +372,10 @@ Here, **feh** is an image viewer available in [CSE VLAB](https://vlabgateway.cse
 
 ### Four cases in self balancing
 
+
+**(1) Insert 30, 20, and 10**
+
+
 | Case | Rotation |  Before   | Intermediate | After   |
 |:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
 | Left-Left | Right Rotation | <img src="images/BiTreeBiTreeInsert_0072.png" width="80%" height="80%"> | |<img src="images/BiTreeBiTreeInsert_0073.png" width="80%" height="80%"> |
@@ -387,6 +411,8 @@ void BiTreeRightRotate(BiTreeNodePtr *pNodePtr) {
     *pNodePtr = pNodeA;
 }
 ```
+
+**(2) Insert 10, 20 and 30**
 
 
 | Case | Rotation |  Before   | Intermediate | After   |
@@ -425,10 +451,13 @@ void BiTreeLeftRotate(BiTreeNodePtr *pNodePtr) {
     *pNodePtr = pNodeC;
 }
 ```
+**(3) Insert 30, 10 and 20**
 
 | Case | Rotation |  Before   | Intermediate | After   |
 |:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
 | Left-Right | Left Rotation, Right Rotation |<img src="images/BiTreeBiTreeInsert_0094.png" width="80%" height="80%">|<img src="images/BiTreeBiTreeInsert_0095.png" width="80%" height="80%">|<img src="images/BiTreeBiTreeInsert_0096.png" width="80%" height="80%">|
+
+**(4) Insert 10, 30 and 20**
 
 | Case | Rotation |  Before   | Intermediate | After   |
 |:-------------:|:-------------:|:-------------:|:-------------:|:-------------:|
@@ -875,7 +904,7 @@ BiTreeNodePtr BiTreeMinValueNode(BiTreeNodePtr root) {
 }
 
 // The parameter pRoot is only used for generating the image of the binary search tree.
-// In this recursive function, pNodePtr might point to a sub-tree in the BST.
+// In this recursive function, *pNodePtr might point to a sub-tree in the BST.
 void BiTreeDelete(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, long numVal, long *pCnt) {
     //static long cnt = 0;
     assert(pCnt);
@@ -961,7 +990,7 @@ void BiTreeDelete(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, long numVal, lo
 }
 
 ```
-### 5.4 SelfBalancing()
+### 5.4 BiTreeSelfBalance()
 
 ```C
 
@@ -976,7 +1005,7 @@ void BiTreeDelete(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, long numVal, lo
 
         BalanceFactor(pNode) = Height(pNode->left) - Height(pNode->right)
 
-    The height of a empty tree (pNode == NULL) is 0.
+    The height of an empty tree (pNode == NULL) is 0.
     BTW, some people define the height of the node (pointed to by pNode) to be -1 when pNode is NULL.
 
     A tree node is left-heavy when its balance factor is larger than 0  (bf > 0).
@@ -993,11 +1022,11 @@ static void BiTreeSelfBalance(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, lon
 
     if (bFactor > 1 && BiTreeBalanceFactor(pNode->leftChild) >= 0) {
         /*
-            Left-Left Case:  the unbalanced node is left-heavy, and its left child is left-heavy or balanced
+            Left-Left Case:  the unbalanced node is left-heavy, and its left child is left-heavy or in-balance
 
                              Suppose NodeC has a right child, NodeD.
                              When NodeD is deleted from the AVL Tree, NodeC becomes unbalanced.
-                             But NodeD's left child (NodeA) can be balanced when NodeB exists.
+                             But NodeC's left child (NodeA) can be in-balance when NodeB exists.
 
                         *pNodePtr
                             .
@@ -1015,7 +1044,7 @@ static void BiTreeSelfBalance(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, lon
     }
     else if (bFactor < -1 && BiTreeBalanceFactor(pNode->rightChild) <= 0) {
         /*
-            Right-Right Case: the unbalanced node is right-heavy, and its right child is right-heavy or balanced
+            Right-Right Case: the unbalanced node is right-heavy, and its right child is right-heavy or in-balance
 
                     *pNodePtr
                         .
@@ -1056,7 +1085,7 @@ static void BiTreeSelfBalance(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, lon
     }
     else if (bFactor < -1 && BiTreeBalanceFactor(pNode->rightChild) > 0) {
         /*
-            Right-Left Case:  the unbalance node is right-heavy, and its right child is left-heavy
+            Right-Left Case:  the unbalanced node is right-heavy, and its right child is left-heavy
 
                         *pNodePtr
                             .

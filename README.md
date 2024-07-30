@@ -43,7 +43,7 @@ Our First Project
 
 [COMP9024/Stacks/Recursion](./Stacks/Recursion/README.md)
 
-## Week 02 - 09
+## Week 02 - 10
 
 [COMP9024/C/HowToMake](./C/HowToMake/README.md)
 
@@ -85,10 +85,13 @@ Our First Project
 
 [COMP9024/Trees/SelfBalancingBST](./Trees/SelfBalancingBST/README.md)
 
+[COMP9024/Strings/HashMap](./Strings/HashMap/README.md)
+
 [COMP9024/Strings/Trie](./Strings/Trie/README.md)
 
 [COMP9024/Strings/FormatString](./Strings/FormatString/README.md)
 
+[COMP9024/Randomised/TopologicalSort](./Randomised/TopologicalSort/README.md)
 
 
 
