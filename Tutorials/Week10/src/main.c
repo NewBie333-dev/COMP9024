@@ -6,10 +6,10 @@
 int main(int argc, char **argv, char **env) {
     srandom(time(NULL));
 
-    ExploreMaze();
+    // ExploreMaze();
 
     printf("After completing the code in Q1-Q5 (Maze.c), please also uncomment line %d in %s:\n\n", (__LINE__ + 1), __FILE__);
-    //ExploreMazeRandomly();
+    ExploreMazeRandomly();
 
     return 0;
 }

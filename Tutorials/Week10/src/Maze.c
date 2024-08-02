@@ -208,7 +208,7 @@ void ExploreMaze(void) {
     PrintMaze(stepName);
 }
 
-#if 0
+#if 1
 /*
     This function returns the next unexplored state randomly and also updates pCurPos->state.
  */
@@ -222,9 +222,12 @@ static PositionState NextUnexploredState(struct PositionInfo *pCurPos) {
         x = random();
         x %= 4;
     } while (((1 << x) & state) != 0);
+    // (1<<X) generate 1000 0100 0010 0001
+    // state is among 1000 0100 0010 0001
+    // if ((1 << x) & state) != 0 then it has been explored 
 
     PositionState nextState = (PositionState)(1 << x);
-    pCurPos->state |= nextState;
+    pCurPos->state |= nextState;// pCurPos->state = pCurPos->state | nextState;
     return nextState;
 }
 
@@ -246,7 +249,8 @@ void ExploreMazeRandomly(void) {
         }        
         PositionState nextState;
         if (pCurPos->state != FINISHED) {
-            nextState = ______Q1______;
+            // nextState = ______Q1______;
+            nextState = NextUnexploredState(pCurPos);
         } else {
             nextState = FINISHED;
         }
@@ -254,19 +258,23 @@ void ExploreMazeRandomly(void) {
         switch(nextState) {
             case TO_RIGHT:
                 pCurPos->dirStr = rightArrowUnicodeStr;
-                ______Q2______;
+                // ______Q2______;
+                PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c + 1, NOT_VISITED);
                 break;
             case TO_DOWN:
                 pCurPos->dirStr = downArrowUnicodeStr;
-                ______Q3______;
+                // ______Q3______;
+                PushAdjacentPosition(pStack, pCurPos->r + 1, pCurPos->c, NOT_VISITED); 
                 break;
             case TO_LEFT:
                 pCurPos->dirStr = leftArrowUnicodeStr;
-                ______Q4______;
+                // ______Q4______;
+                PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c - 1, NOT_VISITED);
                 break;
             case TO_UP:
                 pCurPos->dirStr = upArrowUnicodeStr;
-                ______Q5______;
+                // ______Q5______;
+                PushAdjacentPosition(pStack, pCurPos->r - 1, pCurPos->c, NOT_VISITED);
                 break;
             case FINISHED:
                 pCurPos->dirStr = NULL;

@@ -334,6 +334,8 @@ static void BiTreeSelfBalance(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, lon
     int bFactor = BiTreeBalanceFactor(pNode);
 
     if (bFactor > 1 && BiTreeBalanceFactor(pNode->leftChild) >= 0) {
+        // 通过最小不平衡子树的balance factor来判断最高的孩子，通过最高的孩子的孩子判断最高的孙子
+        // 注意这边是leftChild
         /*
             Left-Left Case:  the unbalanced node is left-heavy, and its left child is left-heavy or in-balance
 
@@ -356,6 +358,7 @@ static void BiTreeSelfBalance(BiTreeNodePtr *pRoot, BiTreeNodePtr *pNodePtr, lon
         BiTreeRightRotate(pNodePtr);
     }
     else if (bFactor < -1 && BiTreeBalanceFactor(pNode->rightChild) <= 0) {
+        // 这边是rightChild, 因为 < -1
         /*
             Right-Right Case: the unbalanced node is right-heavy, and its right child is right-heavy or in-balance
 

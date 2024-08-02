@@ -129,8 +129,7 @@ void PreOrderTraversal2(BiTreeNodePtr root, NodeVisitor visit) {
                     if (curNode->rightChild) {
                         curNode->rightChild->state = NS_FROM_UP;
                         StackPush(pStack, curNode->rightChild);
-                    }
-                    break;
+                    } break;
                 case NS_FROM_RIGHT:
                     // We can pop the node now
                     StackPop(pStack);

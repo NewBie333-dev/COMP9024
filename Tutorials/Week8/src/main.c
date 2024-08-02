@@ -42,7 +42,7 @@ int main(int argc, char **argv, char **env) {
     printf("*****************  InOrderTraversal2() **********************\n");
     ResetNodeState(root);
     printf("After completing the code in Q1-Q5 (BiTree.c), please also uncomment line %d in %s:\n\n", (__LINE__ + 1), __FILE__);
-    //InOrderTraversal2(root, PrintNodeInfo);
+    InOrderTraversal2(root, PrintNodeInfo);
     printf("\n\n");
 
     printf("*****************  PostOrderTraversal2() **********************\n");
