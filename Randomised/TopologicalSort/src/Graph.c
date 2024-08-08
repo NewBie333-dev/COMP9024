@@ -310,6 +310,7 @@ void TopologicalSort(struct Graph *pGraph) {
     struct Queue *pQueue = CreateQueue();
 
     // number of nodes waiting to be enqueued
+    // 相当于初始化, enqueue element which inDegree is 0
     long waitingCount = 0;    
     for (long v = 0; v < pGraph->n; v++) {
         if (pGraph->pNodes[v].inDegree == 0) {

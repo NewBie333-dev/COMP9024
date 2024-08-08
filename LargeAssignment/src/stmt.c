@@ -290,8 +290,11 @@ static AstStmtNodePtr DoWhileStatement(void) {
   ////////////////////////////////////////////////////////////////////////////////////
 
   // Q11. ___________________
+  doWhileStmt = CreateStmtNode(TK_DO);
   // Q12. ___________________
+  Expect(TK_DO);
   // Q13. ___________________
+  // doWhileStmt->kids[0] = CreateLabelNode(label_begin);
   // Q14. ___________________
   // Q15. ___________________
   // Q16. ___________________

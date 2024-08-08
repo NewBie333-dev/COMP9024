@@ -85,11 +85,17 @@ void StackPush(struct Stack *pStack, STACK_ITEM_T item) {
         // Double the capacity of the stack        
         
         // Q1. ___________________
-        // assert(newItems);
+        STACK_ITEM_T * newItems = malloc(pStack->size * 2 * sizeof(STACK_ITEM_T));
+        assert(newItems);
         // Q2. ___________________
+        // memcpy(dest, src, size)
+        memcpy(newItems, pStack->pItems, pStack->size * sizeof(STACK_ITEM_T));
         // Q3. ___________________
+        free(pStack->pItems);
         // Q4. ___________________
+        pStack->size *= 2;
         // Q5. ___________________
+        pStack->pItems = newItems;
     }
 
     // Now the stack is not full. Let us do the push operation.

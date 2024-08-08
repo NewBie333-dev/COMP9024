@@ -259,22 +259,26 @@ void ExploreMazeRandomly(void) {
             case TO_RIGHT:
                 pCurPos->dirStr = rightArrowUnicodeStr;
                 // ______Q2______;
-                PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c + 1, NOT_VISITED);
+                PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c + 1, TO_LEFT);
+                // PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c + 1, NOT_VISITED);
                 break;
             case TO_DOWN:
                 pCurPos->dirStr = downArrowUnicodeStr;
                 // ______Q3______;
-                PushAdjacentPosition(pStack, pCurPos->r + 1, pCurPos->c, NOT_VISITED); 
+                PushAdjacentPosition(pStack, pCurPos->r + 1, pCurPos->c, TO_UP);
+                // PushAdjacentPosition(pStack, pCurPos->r + 1, pCurPos->c, NOT_VISITED); 
                 break;
             case TO_LEFT:
                 pCurPos->dirStr = leftArrowUnicodeStr;
                 // ______Q4______;
-                PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c - 1, NOT_VISITED);
+                PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c - 1, TO_RIGHT);
+                // PushAdjacentPosition(pStack, pCurPos->r, pCurPos->c - 1, NOT_VISITED);
                 break;
             case TO_UP:
                 pCurPos->dirStr = upArrowUnicodeStr;
                 // ______Q5______;
-                PushAdjacentPosition(pStack, pCurPos->r - 1, pCurPos->c, NOT_VISITED);
+                PushAdjacentPosition(pStack, pCurPos->r - 1, pCurPos->c, TO_DOWN);
+                // PushAdjacentPosition(pStack, pCurPos->r - 1, pCurPos->c, NOT_VISITED);
                 break;
             case FINISHED:
                 pCurPos->dirStr = NULL;

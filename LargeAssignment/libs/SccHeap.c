@@ -21,10 +21,10 @@
 #include <string.h> //memset(...)
 #include "SccHeap.h"
 //
-#define HEAP_SIZE (4 * 1024 * 1024)
+#define HEAP_SIZE (4 * 1024)
 
 // 
-#define RESIDUE 8
+#define RESIDUE 8 //what is residue?
 
 // see the comments for STACK_SIZE_ALIGNED() in src/emit.c
 #define ALIGN 3
@@ -109,12 +109,15 @@ static void *OurMalloc(heap_size_t size) {
         ////////////////////////////////////////////////////////////////////////////////////
 
         // Q1. ___________________
+        cur->size = (cur->size - alignedSize - sizeof(heap_size_t));
         // Q2. ___________________
+        ptr = (heap_size_t *)((char *)cur + cur->size + sizeof(heap_size_t));
         // Q3. ___________________
+        *ptr = alignedSize;
 
         //memset(ptr + 1, 0, alignedSize);
         return (ptr + 1);
-      } 
+      } // what does it by cutting here?
       else { 
         /* 
           When the memory block is not large, no cutting is performed any more.
@@ -221,8 +224,11 @@ static void OurFree(void *addr) {
         ////////////////////////////////////////////////////////////////////////////////////
 
         // Q4. ___________________
+        first = freedNode;
         // Q5. ___________________
+        freedNode->next = cur;
         // Q6. ___________________
+        mergeIfAdjacent(freedNode, cur);
       } 
       else {
         /*
@@ -243,9 +249,13 @@ static void OurFree(void *addr) {
         ////////////////////////////////////////////////////////////////////////////////////
 
         // Q7. ___________________
+        pre->next = freedNode;
         // Q8. ___________________
+        freedNode->next = cur;
         // Q9. ___________________
+        mergeIfAdjacent(freedNode, cur);
         // Q10. __________________ 
+        mergeIfAdjacent(pre, freedNode);
       }
       return;
     }
@@ -291,7 +301,7 @@ void printList() {
       Use malloc() and free() in the C library.
  */
 
-//#define USE_OUR_MALLOC_FREE
+#define USE_OUR_MALLOC_FREE
 
 void *SccMalloc(heap_size_t size) {
 #ifdef USE_OUR_MALLOC_FREE

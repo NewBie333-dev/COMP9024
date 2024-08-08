@@ -1,0 +1,18 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     TestSccHeap
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003760, symSize: 0x1D0 }
+  - { offsetInCU: 0x41, offset: 0x41, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100003760, symSize: 0x1D0 }
+  - { offsetInCU: 0x26, offset: 0xCF, size: 0x8, addend: 0x0, symName: _printList, symObjAddr: 0x0, symBinAddr: 0x100003930, symSize: 0xD8 }
+  - { offsetInCU: 0x4D, offset: 0xF6, size: 0x8, addend: 0x0, symName: _first, symObjAddr: 0x1378, symBinAddr: 0x100008008, symSize: 0x0 }
+  - { offsetInCU: 0x9A, offset: 0x143, size: 0x8, addend: 0x0, symName: _init, symObjAddr: 0x1370, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0xB6, offset: 0x15F, size: 0x8, addend: 0x0, symName: _heap, symObjAddr: 0x1380, symBinAddr: 0x100008010, symSize: 0x0 }
+  - { offsetInCU: 0xD7, offset: 0x180, size: 0x8, addend: 0x0, symName: _printList, symObjAddr: 0x0, symBinAddr: 0x100003930, symSize: 0xD8 }
+  - { offsetInCU: 0xFD, offset: 0x1A6, size: 0x8, addend: 0x0, symName: _SccMalloc, symObjAddr: 0xD8, symBinAddr: 0x100003A08, symSize: 0x24 }
+  - { offsetInCU: 0x127, offset: 0x1D0, size: 0x8, addend: 0x0, symName: _OurMalloc, symObjAddr: 0xFC, symBinAddr: 0x100003A2C, symSize: 0x1A8 }
+  - { offsetInCU: 0x187, offset: 0x230, size: 0x8, addend: 0x0, symName: _SccFree, symObjAddr: 0x2A4, symBinAddr: 0x100003BD4, symSize: 0x24 }
+  - { offsetInCU: 0x1AD, offset: 0x256, size: 0x8, addend: 0x0, symName: _OurFree, symObjAddr: 0x2C8, symBinAddr: 0x100003BF8, symSize: 0x1F4 }
+  - { offsetInCU: 0x209, offset: 0x2B2, size: 0x8, addend: 0x0, symName: _initialHeap, symObjAddr: 0x4BC, symBinAddr: 0x100003DEC, symSize: 0x28 }
+  - { offsetInCU: 0x21E, offset: 0x2C7, size: 0x8, addend: 0x0, symName: _mergeIfAdjacent, symObjAddr: 0x4E4, symBinAddr: 0x100003E14, symSize: 0xA8 }
+...
