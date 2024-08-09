@@ -50,7 +50,7 @@ int main(void) {
 
     printf("\n\nNonRecursiveDFS() starting from node %ld:\n", u);
     printf("After completing the code in Q1-Q5 (Graph.c), please also uncomment line %d in %s:\n\n", (__LINE__ + 1), __FILE__);
-    //NonRecursiveDFS(pGraph, u);
+    NonRecursiveDFS(pGraph, u);
 
     ReleaseGraph(pGraph);
 

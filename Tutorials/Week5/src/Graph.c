@@ -153,7 +153,7 @@ void GenOneImage(struct Graph *pGraph, char *graphName, char *fileName, long seq
 
 }
 
-#if 0
+#if 1
 /*
     Please complete the code in Q1-Q5:
 
@@ -169,7 +169,7 @@ void NonRecursiveDFS(struct Graph *pGraph, long u) {
     static long cnt = 0;
 
     int *visited = (int *) malloc(sizeof(int) * pGraph->n);
-    struct Stack *pStack = ______Q1______;
+    struct Stack *pStack = CreateStack(); // Q1
     assert(visited && pStack);
 
     for (long i = 0; i < pGraph->n; i++) {
@@ -177,9 +177,9 @@ void NonRecursiveDFS(struct Graph *pGraph, long u) {
     }
     GenOneImage(pGraph, "dfs", "images/NonRecursiveDFS", cnt, visited);
     printf("\n\t\t\t\tpush %ld\n", u);
-    ______Q2______;
+    StackPush(pStack ,u);
 
-    while (______Q3______) {
+    while (!StackIsEmpty(pStack)) { // !StackIsEmpty(pStack)
         printf("\n");
         PrintStack(pStack);
         STACK_ITEM_T curNodeId = StackPop(pStack);
@@ -194,14 +194,14 @@ void NonRecursiveDFS(struct Graph *pGraph, long u) {
             //for (long v = 0; v < pGraph->n; v++) {
             for (long v = pGraph->n - 1; v >= 0; v--) {
                 if (MatrixElement(pGraph, curNodeId, v) == CONNECTED && !visited[v]) {
-                    ______Q4______;
+                    StackPush(pStack, v);
                     printf("\t\t\t\tpush %ld\n", v);
                 }
             }            
         }
     }
     printf("\n");
-    ______Q5______;
+    ReleaseStack(pStack);
     free(visited);    
 }
 #endif
