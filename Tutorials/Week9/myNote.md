@@ -45,3 +45,9 @@ op：让z的子树称为z父结点的子树（让z的子树代替z的位置）
 
 
 Op: 则令z的直接后继（或直接前驱）替代z，然后从二叉排序树中删去这个直接后继（或直接前驱），这样就转换成了第一或第二种情况。 因为直接后继没有左子树，直接前驱没有右子树。
+
+代码实现中，BiTreeDelete中，case 11的情况，先换成successor，造成inconsistency，然后recursively调用自己
+
+BTW，找successor，先右走一步，在一直左走
+
+**Pointer to pointer 应该会考**
