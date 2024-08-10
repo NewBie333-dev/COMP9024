@@ -143,7 +143,7 @@ void PreOrderTraversal2(BiTreeNodePtr root, NodeVisitor visit) {
     }
 } 
 
-#if 0
+#if 1
 
 /*
     Please complete the code in Q1-Q5.
@@ -161,22 +161,22 @@ void InOrderTraversal2(BiTreeNodePtr root, NodeVisitor visit) {
             
             switch (curNode->state) {
                 case NS_FROM_UP:
-                    ______Q1______;
+                    curNode->state = NS_FROM_LEFT;
                     if (curNode->leftChild) {
-                        ______Q2______;
+                        curNode->leftChild->state = NS_FROM_UP;
                         StackPush(pStack, curNode->leftChild);
                     }
                     break;
                 case NS_FROM_LEFT:
-                    ______Q3______;
-                    ______Q4______;
+                    visit(curNode);
+                    curNode->state = NS_FROM_RIGHT;
                     if (curNode->rightChild) {
                         curNode->rightChild->state = NS_FROM_UP;
                         StackPush(pStack, curNode->rightChild);
                     }
                     break;
                 case NS_FROM_RIGHT:
-                    ______Q5______;
+                    StackPop(pStack);
                     break;
                 default:
                     break;

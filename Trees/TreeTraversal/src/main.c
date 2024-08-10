@@ -44,7 +44,12 @@ int main(int argc, char **argv, char **env) {
     PostOrderTraversal2(root, PrintNodeInfo);
     printf("\n\n");  
 
+
     // Free the heap memory
+    printf("*****************  InOrderTraversal2() **********************\n");
+    ResetNodeState(root);
+    InOrderTraversal2(root, PrintNodeInfo);
+
     ReleaseBinaryTree(root);
 
     return 0;
